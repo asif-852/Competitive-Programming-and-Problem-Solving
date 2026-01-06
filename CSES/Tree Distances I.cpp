@@ -1,6 +1,7 @@
 
+
 #ifndef ONLINE_JUDGE
-#include <\Users\asifa\OneDrive\Documents\C++ programming\Debugging.h>
+#include <\Users\asifa\OneDrive\Documents\Debugging.h>
 #define debug(x...) cerr << "[" << #x << "] = ["; _print(x)
 #else
 #define debug(x...) 42
