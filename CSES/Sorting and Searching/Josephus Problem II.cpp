@@ -14,35 +14,30 @@ using ordered_set = tree<
     rb_tree_tag,
     tree_order_statistics_node_update>;
 
-void solve()
-{
+void solve() {
 
     int n, k;
     cin >> n >> k;
     ordered_set<int> st;
-    for (int i = 1; i <= n; i++)
-    {
+    for(int i = 1; i <= n; i++) {
         st.insert(i);
     }
     int curridx = 0;
-    while (!st.empty())
-    {
-        curridx = ((curridx + k)) % st.size();
+    while(!st.empty()) {
+        curridx = ((curridx + k - 1)) % st.size();
         auto it = st.find_by_order(curridx);
         cout << *it << " \n"[st.size() == 1];
         st.erase(it);
     }
 }
 
-signed main()
-{
+signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
 
     int t = 1;
     // cin >> t;
-    for (int i = 1; i <= t; i++)
-    {
+    for(int i = 1; i <= t; i++) {
         solve();
     }
 
