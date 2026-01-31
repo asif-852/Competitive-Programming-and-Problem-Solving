@@ -6,7 +6,7 @@ int board[8][8];
 
 int futureMoves(int r, int c) {
     int count = 0;
-    for(auto [dr, dc] : vector<pair<int, int>> {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}) {
+    for(auto [dr, dc] : {pair{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}) {
         int nr = r + dr;
         int nc = c + dc;
         count += (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[nr][nc] == 0);
@@ -22,7 +22,7 @@ bool solveKnightTour(int r, int c, int count) {
     }
  
     vector<pair<int, pair<int, int>>> moves;
-    for(auto [dr, dc] : vector<pair<int, int>> {{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}) {
+    for(auto [dr, dc] : {pair{1, 2}, {1, -2}, {2, 1}, {2, -1}, {-1, 2}, {-1, -2}, {-2, 1}, {-2, -1}}) {
         int nr = r + dr;
         int nc = c + dc;
         if(nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && board[nr][nc] == 0) {
