@@ -1,10 +1,105 @@
 
+// Approach 1: Binary Indexed Tree (Fenwick Tree)
+
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int zero = 0, one = 0, two = 0;
+struct BIT {
+    vector<long long> M, A;
+    BIT(int n) {
+        init(n);
+    }
+    void init(int n) {
+        M.assign(n + 1, 0);
+        A.assign(n + 1, 0);
+    }
+    void update(int i, long long mul, long long add) {
+        while (i < (int)M.size()) {
+            M[i] += mul;
+            A[i] += add;
+            i |= (i + 1);
+        }
+    }
+    void rangeUpdate(int l, int r, long long x) {
+        update(l, x, -x * (l - 1));
+        update(r, -x, x * r);
+    }
+    long long query(int i) {
+        long long mul = 0, add = 0;
+        int st = i;
+        while (i >= 0) {
+            mul += M[i];
+            add += A[i];
+            i = (i & (i + 1)) - 1;
+        }
+        return (mul * st + add);
+    }
+    long long rangeQuery(int l, int r) {
+        return query(r) - query(l - 1);
+    }
 };
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<long long> a(n);
+    for(auto& x : a) cin >> x;
+
+    BIT bit(n);
+    for(int i = 0; i < n; i++) {
+        bit.rangeUpdate(i, i, a[i]);
+    }
+
+    while(q--) {
+        int type;
+        cin >> type;
+        if(type == 1) {
+            int l, r;
+            long long u;
+            cin >> l >> r >> u;
+            bit.rangeUpdate(l - 1, r - 1, u);
+        } else {
+            int k;
+            cin >> k;
+            cout << bit.rangeQuery(k - 1, k - 1) << '\n';
+        }
+    }
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t = 1;
+    //cin >> t;
+    for(int i = 1; i <= t; i++) {
+        solve();
+    }
+
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Approach 2: Segment Tree
+
+/*
+
+#include <bits/stdc++.h>
+using namespace std;
 
 template <typename T_Node, typename T_Lazy>
 class SegmentTree {
@@ -117,53 +212,67 @@ public:
     }
 };
 
+vector<long long> a;
+
 void solve() {
     int n, q;
     cin >> n >> q;
+    a.resize(n);
+    for(auto& x : a) cin >> x;
 
-    auto merge = [](const Node& a, const Node& b) -> Node {
-        return {a.zero + b.zero, a.one + b.one, a.two + b.two};
+    auto merge = [](const long long& a, const long long& b) -> long long { 
+        return a + b; 
     };
 
-    auto apply = [](Node& node, const int& inc, int L, int R) {
-        int shift = inc % 3;
-        for(int i = 0; i < shift; i++) {
-            swap(node.zero, node.two);
-            swap(node.one, node.two);
-        }
+    auto apply = [](long long& node, const long long& lazy_val, int L, int R) { 
+        node += lazy_val; 
     };
 
-    auto combine = [](const int& a, const int& b) -> int {
-        return (a + b) % 3;
+    auto combine = [](const long long& old_lazy, const long long& new_lazy) -> long long { 
+        return old_lazy + new_lazy; 
     };
 
-    auto build = [](int idx) -> Node {
-        return {1, 0, 0};  // Initially count of "divisible by 3" is 1
+    auto build = [](int idx) -> long long { 
+        return a[idx]; 
     };
 
-    SegmentTree<Node, int> tree(n, 0, {0, 0, 0}, merge, apply, combine, build);
+    SegmentTree<long long, long long> st(
+        n,
+        0LL,            // no lazy value (0 means no pending addition)
+        0LL,            // identity for point query
+        merge,
+        apply,
+        combine,
+        build
+    );
 
     while(q--) {
-        int type, l, r;
-        cin >> type >> l >> r;
+        int type;
+        cin >> type;
         if(type == 1) {
-            cout << tree.query(l, r).zero << '\n';
+            int l, r;
+            long long u;
+            cin >> l >> r >> u;
+            st.update(l - 1, r - 1, u); 
         } else {
-            tree.update(l, r, 1);
+            int k;
+            cin >> k;
+            cout << st.query(k - 1, k - 1) << '\n';  
         }
     }
 }
- 
- 
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
- 
+
     int t = 1;
     //cin >> t;
     for(int i = 1; i <= t; i++) {
         solve();
     }
- 
+
     return 0;
-} 
+}
+
+*/

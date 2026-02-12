@@ -2,10 +2,6 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int zero = 0, one = 0, two = 0;
-};
-
 template <typename T_Node, typename T_Lazy>
 class SegmentTree {
 public:
@@ -117,53 +113,64 @@ public:
     }
 };
 
+vector<int> a;
+
 void solve() {
     int n, q;
     cin >> n >> q;
+    a.resize(n);
+    for(auto& x : a) cin >> x;
 
-    auto merge = [](const Node& a, const Node& b) -> Node {
-        return {a.zero + b.zero, a.one + b.one, a.two + b.two};
+    auto merge = [](const int& a, const int& b) -> int { 
+        return min(a, b); 
     };
 
-    auto apply = [](Node& node, const int& inc, int L, int R) {
-        int shift = inc % 3;
-        for(int i = 0; i < shift; i++) {
-            swap(node.zero, node.two);
-            swap(node.one, node.two);
-        }
+    auto apply = [](int& node, const int& lazy_val, int L, int R) { 
+        node = lazy_val;
     };
 
-    auto combine = [](const int& a, const int& b) -> int {
-        return (a + b) % 3;
+    auto combine = [](const int& old_lazy, const int& new_lazy) -> int { 
+        return new_lazy;
     };
 
-    auto build = [](int idx) -> Node {
-        return {1, 0, 0};  // Initially count of "divisible by 3" is 1
+    auto build = [](int idx) -> int { 
+        return a[idx]; 
     };
 
-    SegmentTree<Node, int> tree(n, 0, {0, 0, 0}, merge, apply, combine, build);
+    SegmentTree<int, int> st(
+        n,
+        -1,             // no lazy value (using -1 since valid values are >= 1)
+        INT_MAX,        // identity for min
+        merge,
+        apply,
+        combine,
+        build
+    );
 
     while(q--) {
-        int type, l, r;
-        cin >> type >> l >> r;
+        int type;
+        cin >> type;
         if(type == 1) {
-            cout << tree.query(l, r).zero << '\n';
+            int k, u;
+            cin >> k >> u;
+            st.update(k - 1, k - 1, u);  
         } else {
-            tree.update(l, r, 1);
+            int l, r;
+            cin >> l >> r;
+            cout << st.query(l - 1, r - 1) << '\n'; 
         }
     }
 }
- 
- 
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
- 
+
     int t = 1;
     //cin >> t;
     for(int i = 1; i <= t; i++) {
         solve();
     }
- 
+
     return 0;
-} 
+}

@@ -2,19 +2,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int zero = 0, one = 0, two = 0;
-};
-
 template <typename T_Node, typename T_Lazy>
 class SegmentTree {
-public:
+   public:
     using Merger = function<T_Node(const T_Node&, const T_Node&)>;
     using Applier = function<void(T_Node&, const T_Lazy&, int, int)>;
     using Combiner = function<T_Lazy(const T_Lazy&, const T_Lazy&)>;
     using Builder = function<T_Node(int)>;
 
-private:
+   private:
     int N;
     vector<T_Node> tree;
     vector<T_Lazy> lazy;
@@ -63,7 +59,8 @@ private:
     }
 
     void update_internal(int node, int L, int R, int i, int j, const T_Lazy& update) {
-        if (L > R || L > j || R < i) return;
+        if (L > R || L > j || R < i)
+            return;
         if (L >= i && R <= j) {
             lazy[node] = combine_op(lazy[node], update);
             apply_op(tree[node], update, L, R);
@@ -94,11 +91,8 @@ private:
         return merge_op(p1, p2);
     }
 
-public:
-    SegmentTree(int n, T_Lazy no_l, T_Node identity_n,
-                Merger m, Applier a, Combiner c, Builder b)
-        : N(n), no_lazy_val(no_l), identity_node_val(identity_n),
-          merge_op(m), apply_op(a), combine_op(c), build_op(b) {
+   public:
+    SegmentTree(int n, T_Lazy no_l, T_Node identity_n, Merger m, Applier a, Combiner c, Builder b) : N(n), no_lazy_val(no_l), identity_node_val(identity_n), merge_op(m), apply_op(a), combine_op(c), build_op(b) {
         tree.resize(4 * N + 5);
         lazy.resize(4 * N + 5);
         if (N > 0) {
@@ -107,63 +101,69 @@ public:
     }
 
     void update(int i, int j, const T_Lazy& u) {
-        if (N == 0 || i > j || i < 0 || j >= N) return;
+        if (N == 0 || i > j || i < 0 || j >= N)
+            return;
         update_internal(1, 0, N - 1, i, j, u);
     }
 
     T_Node query(int i, int j) {
-        if (N == 0 || i > j || i < 0 || j >= N) return identity_node_val;
+        if (N == 0 || i > j || i < 0 || j >= N)
+            return identity_node_val;
         return query_internal(1, 0, N - 1, i, j);
     }
 };
 
 void solve() {
-    int n, q;
-    cin >> n >> q;
+    string s;
+    cin >> s;
+    int q;
+    cin >> q;
+    int n = s.size();
 
-    auto merge = [](const Node& a, const Node& b) -> Node {
-        return {a.zero + b.zero, a.one + b.one, a.two + b.two};
+    auto merge = [](const int& a, const int& b) -> int { 
+        return a + b; 
     };
 
-    auto apply = [](Node& node, const int& inc, int L, int R) {
-        int shift = inc % 3;
-        for(int i = 0; i < shift; i++) {
-            swap(node.zero, node.two);
-            swap(node.one, node.two);
-        }
+    auto apply = [](int& node, const int& lazy_val, int L, int R) { 
+        node += lazy_val * (R - L + 1); 
     };
 
-    auto combine = [](const int& a, const int& b) -> int {
-        return (a + b) % 3;
+    auto combine = [](const int& old_lazy, const int& new_lazy) -> int { 
+        return old_lazy + new_lazy; 
     };
 
-    auto build = [](int idx) -> Node {
-        return {1, 0, 0};  // Initially count of "divisible by 3" is 1
+    auto build = [](int idx) -> int { 
+        return 0; 
     };
 
-    SegmentTree<Node, int> tree(n, 0, {0, 0, 0}, merge, apply, combine, build);
+    SegmentTree<int, int> tree(n, 0, 0, merge, apply, combine, build);
 
     while(q--) {
-        int type, l, r;
-        cin >> type >> l >> r;
-        if(type == 1) {
-            cout << tree.query(l, r).zero << '\n';
-        } else {
-            tree.update(l, r, 1);
+        char type;
+        cin >> type;
+        if(type == 'I') {
+            int l, r;
+            cin >> l >> r;
+            tree.update(l - 1, r - 1, 1);
+        } else if(type == 'Q') {
+            int i;
+            cin >> i;
+            cout << (tree.query(i - 1, i - 1) & 1 ? ('1' - s[i - 1]) : (s[i - 1] - '0')) << '\n';
         }
     }
 }
- 
- 
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
- 
+
     int t = 1;
-    //cin >> t;
+    cin >> t;
     for(int i = 1; i <= t; i++) {
+        cout << "Case " << i << ":\n";
         solve();
     }
- 
+
     return 0;
-} 
+}
+

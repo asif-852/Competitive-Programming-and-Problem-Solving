@@ -2,19 +2,15 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int zero = 0, one = 0, two = 0;
-};
-
 template <typename T_Node, typename T_Lazy>
 class SegmentTree {
-public:
+   public:
     using Merger = function<T_Node(const T_Node&, const T_Node&)>;
     using Applier = function<void(T_Node&, const T_Lazy&, int, int)>;
     using Combiner = function<T_Lazy(const T_Lazy&, const T_Lazy&)>;
     using Builder = function<T_Node(int)>;
 
-private:
+   private:
     int N;
     vector<T_Node> tree;
     vector<T_Lazy> lazy;
@@ -63,7 +59,8 @@ private:
     }
 
     void update_internal(int node, int L, int R, int i, int j, const T_Lazy& update) {
-        if (L > R || L > j || R < i) return;
+        if (L > R || L > j || R < i)
+            return;
         if (L >= i && R <= j) {
             lazy[node] = combine_op(lazy[node], update);
             apply_op(tree[node], update, L, R);
@@ -94,11 +91,8 @@ private:
         return merge_op(p1, p2);
     }
 
-public:
-    SegmentTree(int n, T_Lazy no_l, T_Node identity_n,
-                Merger m, Applier a, Combiner c, Builder b)
-        : N(n), no_lazy_val(no_l), identity_node_val(identity_n),
-          merge_op(m), apply_op(a), combine_op(c), build_op(b) {
+   public:
+    SegmentTree(int n, T_Lazy no_l, T_Node identity_n, Merger m, Applier a, Combiner c, Builder b) : N(n), no_lazy_val(no_l), identity_node_val(identity_n), merge_op(m), apply_op(a), combine_op(c), build_op(b) {
         tree.resize(4 * N + 5);
         lazy.resize(4 * N + 5);
         if (N > 0) {
@@ -107,63 +101,86 @@ public:
     }
 
     void update(int i, int j, const T_Lazy& u) {
-        if (N == 0 || i > j || i < 0 || j >= N) return;
+        if (N == 0 || i > j || i < 0 || j >= N)
+            return;
         update_internal(1, 0, N - 1, i, j, u);
     }
 
     T_Node query(int i, int j) {
-        if (N == 0 || i > j || i < 0 || j >= N) return identity_node_val;
+        if (N == 0 || i > j || i < 0 || j >= N)
+            return identity_node_val;
         return query_internal(1, 0, N - 1, i, j);
     }
 };
 
+vector<long long> a;
+
 void solve() {
     int n, q;
     cin >> n >> q;
+    a.resize(n);
+    for(auto& x : a) cin >> x;
 
-    auto merge = [](const Node& a, const Node& b) -> Node {
-        return {a.zero + b.zero, a.one + b.one, a.two + b.two};
+    auto merge = [](const long long& a, const long long& b) -> long long { 
+        return a + b; 
     };
 
-    auto apply = [](Node& node, const int& inc, int L, int R) {
-        int shift = inc % 3;
-        for(int i = 0; i < shift; i++) {
-            swap(node.zero, node.two);
-            swap(node.one, node.two);
-        }
+    auto apply = [](long long& node, const long long& lazy_val, int L, int R) { 
+        node += lazy_val;
     };
 
-    auto combine = [](const int& a, const int& b) -> int {
-        return (a + b) % 3;
+    auto combine = [](const long long& old_lazy, const long long& new_lazy) { 
+        return old_lazy + new_lazy; 
     };
 
-    auto build = [](int idx) -> Node {
-        return {1, 0, 0};  // Initially count of "divisible by 3" is 1
+    auto build = [](int idx) { 
+        return a[idx]; 
     };
 
-    SegmentTree<Node, int> tree(n, 0, {0, 0, 0}, merge, apply, combine, build);
+    SegmentTree<long long, long long> st(
+        n,
+        0LL,  // no lazy value
+        0LL,  // identity for sum
+        merge,
+        apply,
+        combine,
+        build
+    );
 
     while(q--) {
-        int type, l, r;
-        cin >> type >> l >> r;
+        int type;
+        cin >> type;
         if(type == 1) {
-            cout << tree.query(l, r).zero << '\n';
+            int i;
+            cin >> i;
+            long long val = st.query(i, i);
+            cout << val << '\n';
+            st.update(i, i, -val);  // set to 0 by subtracting current value
+        } else if(type == 2) {
+            int i;
+            long long v;
+            cin >> i >> v;
+            st.update(i, i, v);
         } else {
-            tree.update(l, r, 1);
+            int i, j;
+            cin >> i >> j;
+            cout << st.query(i, j) << '\n';
         }
     }
 }
- 
- 
-int main() {
+
+signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
- 
-    int t = 1;
-    //cin >> t;
+
+    int t;
+    cin >> t;
     for(int i = 1; i <= t; i++) {
+        a.clear();
+        cout << "Case " << i << ":\n";
         solve();
     }
- 
+
     return 0;
-} 
+}
+

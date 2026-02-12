@@ -1,10 +1,76 @@
 
+// Approach 1: Sparse Table
+
 #include <bits/stdc++.h>
 using namespace std;
 
-struct Node {
-    int zero = 0, one = 0, two = 0;
+template <typename T, typename F>
+class SparseTable {
+public:
+    int n;
+    vector<vector<T>> mat; // mat[j][i] stores the result for the interval of length 2^j starting at i
+    F func;
+
+    SparseTable(const vector<T> &a, const F &f) : func(f) {
+        n = static_cast<int>(a.size());
+        int max_log = 32 - __builtin_clz(n);
+        mat.resize(max_log);
+        mat[0] = a;
+        for (int j = 1; j < max_log; j++) {
+            mat[j].resize(n - (1 << j) + 1);
+            for (int i = 0; i <= n - (1 << j); i++) {
+                mat[j][i] = func(mat[j - 1][i], mat[j - 1][i + (1 << (j - 1))]);
+            }
+        }
+    }
+
+    T get(int from, int to) const {
+        assert(0 <= from && from <= to && to <= n - 1);
+        int lg = 32 - __builtin_clz(to - from + 1) - 1;
+        return func(mat[lg][from], mat[lg][to - (1 << lg) + 1]);
+    }
 };
+
+void solve() {
+    int n, q;
+    cin >> n >> q;
+    vector<int> v(n);
+    for(auto &x : v) cin >> x;
+
+    SparseTable st(v, [](int a, int b) {
+        return min(a, b);
+    });
+
+    while(q--) {
+        int l, r;
+        cin >> l >> r;
+        cout << st.get(l - 1, r - 1) << '\n';
+    }
+}
+
+signed main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+
+    int t;
+    cin >> t;
+    for(int i = 1; i <= t; i++) {
+        cout << "Case " << i << ":\n";
+        solve();
+    }
+
+    return 0;
+}
+
+/*
+
+// Approach 2: Segment Tree
+
+/*
+
+#include <bits/stdc++.h>
+using namespace std;
+
 
 template <typename T_Node, typename T_Lazy>
 class SegmentTree {
@@ -117,53 +183,54 @@ public:
     }
 };
 
+vector<int> v;
+
 void solve() {
+
     int n, q;
     cin >> n >> q;
+    v.assign(n, 0);
+    for(auto& x : v) cin >> x;
 
-    auto merge = [](const Node& a, const Node& b) -> Node {
-        return {a.zero + b.zero, a.one + b.one, a.two + b.two};
+
+    auto builder = [](int idx) -> int {
+        return v[idx];
     };
 
-    auto apply = [](Node& node, const int& inc, int L, int R) {
-        int shift = inc % 3;
-        for(int i = 0; i < shift; i++) {
-            swap(node.zero, node.two);
-            swap(node.one, node.two);
-        }
+    auto merger = [](const int& a, const int& b) -> int {
+        return min(a, b);
     };
 
-    auto combine = [](const int& a, const int& b) -> int {
-        return (a + b) % 3;
+    auto combiner = [](const int& current_lazy, const int& new_update) -> int {
+
     };
 
-    auto build = [](int idx) -> Node {
-        return {1, 0, 0};  // Initially count of "divisible by 3" is 1
+    auto applier = [](int& node_val, const int& update_val, int L, int R) {
+
     };
 
-    SegmentTree<Node, int> tree(n, 0, {0, 0, 0}, merge, apply, combine, build);
+    SegmentTree<int, int> st(n, 0, 2e9, merger, applier, combiner, builder);
 
     while(q--) {
-        int type, l, r;
-        cin >> type >> l >> r;
-        if(type == 1) {
-            cout << tree.query(l, r).zero << '\n';
-        } else {
-            tree.update(l, r, 1);
-        }
+        int l, r;
+        cin >> l >> r;
+        cout << st.query(l - 1, r - 1) << '\n';
     }
 }
- 
- 
-int main() {
+
+
+signed main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
- 
+
     int t = 1;
-    //cin >> t;
+    cin >> t;
     for(int i = 1; i <= t; i++) {
+        cout << "Case " << i << ":\n";
         solve();
     }
- 
+
     return 0;
-} 
+}
+
+*/
