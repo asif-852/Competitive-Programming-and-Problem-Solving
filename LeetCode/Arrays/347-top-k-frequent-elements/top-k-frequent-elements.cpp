@@ -11,12 +11,10 @@ public:
             freqs[count].push_back(val);
         }
         vector<int> ans;
-        int count = 0;
         for(int i = len; i >= 0; i--) {
             for(auto val : freqs[i]) {
                 ans.push_back(val);
-                count++;
-                if(count == k) {
+                if(ans.size() == k) {
                     return ans;
                 }
             }   
