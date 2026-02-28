@@ -28,15 +28,15 @@ public:
             }
         }
 
-        for(int j = 0; j < n; j++) {
-            if(firstRowBad) {
-                matrix[0][j] = 0;
+        if(firstRowBad) {
+            for(int j = 0; j < n; j++) {
+                matrix[0][j] = 0;    
             }
         }
 
-        for(int i = 0; i < m; i++) {
-            if(firstColBad) {
-                matrix[i][0] = 0;
+        if(firstColBad) {
+            for(int i = 0; i < m; i++) {
+                matrix[i][0] = 0;    
             }
         }
     }
