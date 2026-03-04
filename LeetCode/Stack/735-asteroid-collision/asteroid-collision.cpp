@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int explode(int x, int y) {
+    int collide(int x, int y) {
         if(abs(x) == abs(y)) {
             return 0;
         }
@@ -13,7 +13,7 @@ public:
             while(!st.empty() && st.top() > 0 && val < 0) {
                 int val2 = st.top();
                 st.pop();
-                int winner = explode(val, val2);
+                int winner = collide(val, val2);
                 pushed = 1;
                 if(winner == 0) {
                     break;
