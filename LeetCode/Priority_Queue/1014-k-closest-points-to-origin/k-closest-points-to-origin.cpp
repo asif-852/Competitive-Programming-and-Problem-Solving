@@ -22,9 +22,9 @@ public:
         }
         vector<vector<int>> ans;
         while(!pq.empty()) {
-            Point p = pq.top();
+            auto [x, y] = pq.top();
             pq.pop();
-            ans.push_back({p.x, p.y});
+            ans.push_back({x, y});
         }
         return ans;
     }
