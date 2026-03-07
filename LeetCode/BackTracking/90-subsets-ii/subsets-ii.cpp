@@ -1,8 +1,31 @@
 
+class Solution {
+public:
+    void backtrack(const vector<int>& nums, int start, vector<int>& current_subset, vector<vector<int>>& result) {
+        result.push_back(current_subset);
+        
+        for(int i = start; i < nums.size(); i++) {
+            // Skip duplicates: If the current number is the same as the previous one
+            if(i > start && nums[i] == nums[i - 1]) {
+                continue;
+            }
+            current_subset.push_back(nums[i]);
+            backtrack(nums, i + 1, current_subset, result);
+            current_subset.pop_back();
+        }
+    }
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        vector<vector<int>> result;
+        vector<int> current_subset;
+        sort(nums.begin(), nums.end());
+        backtrack(nums, 0, current_subset, result);
+        return result;
+    }
+};
 
-// Approach 2: Using Bitmasking and data structures
+// Approach 2: Using Bitmasking
 
-
+/*
 
 class Solution {
 public:
@@ -35,3 +58,4 @@ public:
     }
 };
 
+*/
