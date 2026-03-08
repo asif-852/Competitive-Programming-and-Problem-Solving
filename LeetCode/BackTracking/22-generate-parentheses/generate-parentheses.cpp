@@ -1,7 +1,7 @@
 class Solution {
 public:
     void backtrack(int n, int open_count, int close_count, string& current_string, vector<string>& result) {
-        if(current_string.length() == 2 * n) {
+        if(current_string.size() == 2 * n) {
             result.push_back(current_string);
             return;
         }
@@ -45,7 +45,7 @@ public:
             State curr = q.front();
             q.pop();
 
-            if(curr.current_string.length() == 2 * n) {
+            if(curr.current_string.size() == 2 * n) {
                 result.push_back(curr.current_string);
                 continue; 
             }
