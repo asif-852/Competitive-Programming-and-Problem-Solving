@@ -12,7 +12,7 @@ public:
         board[i][j] = '#';
         
         bool found = false;
-        const vector<pair<int, int>> dirs = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+        const array<pair<int, int>, 4> dirs = {{{1, 0}, {-1, 0}, {0, 1}, {0, -1}}};
         for(auto& [di, dj] : dirs) {
             if(dfs(board, i + di, j + dj, word, curr_depth + 1)) {
                 found = true;
