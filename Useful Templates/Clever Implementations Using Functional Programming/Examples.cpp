@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 using namespace std;
- 
+
 
 void solve() {
     //std::any_of
@@ -17,10 +17,24 @@ void solve() {
     }
 
     //but you could be smart and write this all in one line.
-    bool ok = any_of(a.begin(), a.end(), [](int x) { return x == 9; });
+    ok = any_of(a.begin(), a.end(), [](int x) { return x == 9; });
+    cout << (ok ? "YES" : "NO") << '\n';
+    
+    //std::all_of
+    //This is a very useful function that returns true if all of the elements in the range [first, last) satisfy some condition. Let's say you want to figure out if an array contains only even numbers. You could just write the naive loop and waste time in contest.
+
+    ok = all_of(a.begin(), a.end(), [](int x) { return x % 2 == 0; });
+    cout << (ok ? "YES" : "NO") << '\n';
+    
+    //std::none_of
+    //This is a very useful function that returns true if none of the elements in the range [first, last) satisfy some condition. Let's say you want to figure out if an array contains no 9s. You could just write the naive loop and waste time in contest.
+
+    ok = none_of(a.begin(), a.end(), [](int x) { return x == 9; });
+    cout << (ok ? "YES" : "NO") << '\n';
+    
 }
- 
- 
+
+
 int main() {
     ios::sync_with_stdio(false);
     cin.tie(nullptr);
