@@ -13,6 +13,8 @@
 *.o
 *.obj
 
+.clangd
+
 # Compiled Dynamic libraries
 *.so
 *.dylib
