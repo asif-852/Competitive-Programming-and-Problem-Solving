@@ -1,3 +1,6 @@
+
+// Conditional searches, counting elements, and finding elements in C++ STL
+
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -206,6 +209,23 @@ void solve() {
 
         ok = is_sorted(a.begin(), a.end());
         cout << (ok ? "YES" : "NO") << '\n';
+    }
+
+
+
+
+    //std::accumulate
+    //This is a very useful function that returns the sum of the elements in the range [first, last) plus an initial value. Let's say you want to figure out the sum of the elements in an array.
+
+    {
+        vector<int> a = {1, 2, 3, 4, 5};
+        int sum = 0;
+        for(int i = 0; i < (int)(a).size(); i++) {
+            sum += a[i];
+        }
+
+        sum = accumulate(a.begin(), a.end(), 0);
+        cout << "Sum: " << sum << '\n';
     }
 
 }
