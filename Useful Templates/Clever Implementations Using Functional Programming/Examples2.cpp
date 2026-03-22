@@ -7,9 +7,11 @@ using namespace std;
 
 void solve() {
     
-    //std::partial_sum
-    //This is a very useful function that computes the partial sums of the elements in the range [first, last) and stores the result in the range beginning at d_first. Let's say you want to compute the prefix sums of an array.
-
+    /*
+     * std::partial_sum
+     * This is a very useful function that computes the partial sums of the elements in the range [first, last) and stores the result in the range beginning at d_first.
+     * Let's say you want to compute the prefix sums of an array.
+     */
     {
         vector<int> a = {1, 2, 3, 4, 5};
         vector<int> prefix_sums((int)(a).size());   
@@ -45,9 +47,12 @@ void solve() {
 
 
 
-    //std::adjacent_difference
-    //This is a very useful function that computes the differences between adjacent elements in the range [first, last) and stores the result in the range beginning at d_first. Let's say you want to compute the differences between adjacent elements in an array.
 
+    /*
+     * std::adjacent_difference
+     * This is a very useful function that computes the differences between adjacent elements in the range [first, last) and stores the result in the range beginning at d_first. 
+     * Let's say you want to compute the differences between adjacent elements in an array.
+     */
     {
         vector<int> a = {1, 3, 6, 10, 15};
         vector<int> differences((int)(a).size());
@@ -67,9 +72,12 @@ void solve() {
 
 
 
-    //std::for_each
-    //This is a very useful function that applies a function to each element in the range [first, last). Let's say you want to print each element in an array.
 
+    /*
+     * std::for_each
+     * This is a very useful function that applies a function to each element in the range [first, last). 
+     * Let's say you want to increment each element in an array.
+     */
     {
         vector<int> a = {1, 2, 3, 4, 5};
         for(int i = 0; i < (int)(a).size(); i++) {
@@ -85,8 +93,12 @@ void solve() {
 
 
 
-    //std::transform
-    //This is a very useful function that applies a function to each element in the range [first, last) and stores the result in the range beginning at d_first. Let's say you want to square each element in an array.
+
+    /*
+     * std::transform
+     * This is a very useful function that applies a function to each element in the range [first, last) and stores the result in the range beginning at d_first. 
+     * Let's say you want to square each element in an array.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5};
         vector<int> squared((int)(a).size());
@@ -102,8 +114,76 @@ void solve() {
         cout << '\n';
     }
 
-    //Note: Transform is basically a more general version of for_each. It allows you to store the results of the function in a different container, whereas for_each modifies the elements in place.
+    // Note: Transform is basically a more general version of for_each. It allows you to store the results of the function in a different container, whereas for_each modifies the elements in place.
 
+
+
+
+
+    /*
+    * std::iota
+     * This is a very useful function that fills the range [first, last) with sequentially increasing values, starting from a given value.
+     * Let's say you want to fill an array with the first n natural numbers.
+    */
+    {
+        int n = 5;
+        vector<int> a(n);
+        for(int i = 0; i < n; i++) {
+            a[i] = i + 1;
+        }
+
+        a = vector<int>(n);            // 0 0 0 0 0
+        iota(a.begin(), a.end(), 1);   // Modified a: 1 2 3 4 5
+        for(int x : a) {
+            cout << x << ' ';
+        }
+        cout << '\n';
+    }
+
+
+
+
+    // More useful cases of std::partial_sum
+
+    // Suffix maximum of an array.
+
+    {
+        vector<int> a = {77, 128, 99, 42, 56};
+        vector<int> suffix_max((int)(a).size());
+        suffix_max.back() = a.back();
+        for(int i = (int)(a).size() - 2; i >= 0; i--) {
+            suffix_max[i] = max(a[i], suffix_max[i + 1]);
+        }
+
+        a = {77, 128, 99, 42, 56};
+        partial_sum(a.rbegin(), a.rend(), suffix_max.rbegin(), [](int x, int y) { return max(x, y); });    // suffix_max: 128 128 99 56 56
+        for(int x : suffix_max) {
+            cout << x << ' ';
+        }
+        cout << '\n';
+    }
+
+
+
+
+    // Prefix xor of an array.
+
+    {
+        vector<int> a = {1, 2, 3, 4, 5};
+        vector<int> prefix_xor((int)(a).size());
+        prefix_xor[0] = a[0];
+        for(int i = 1; i < (int)(a).size(); i++) {
+            prefix_xor[i] = prefix_xor[i - 1] ^ a[i];
+        }
+
+        a = {1, 2, 3, 4, 5};
+        partial_sum(a.begin(), a.end(), prefix_xor.begin(), [](int x, int y) { return x ^ y; });    // prefix_xor: 1 3 0 4 1
+        for(int x : prefix_xor) {
+            cout << x << ' ';
+        }
+        cout << '\n';
+    }
+    
 }
  
  
@@ -119,3 +199,4 @@ int main() {
 
     return 0;
 }
+

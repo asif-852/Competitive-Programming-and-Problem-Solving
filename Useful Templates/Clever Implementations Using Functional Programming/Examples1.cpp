@@ -6,8 +6,11 @@ using namespace std;
 
 
 void solve() {
-    //std::any_of
-    //This is a very useful function that returns true if any of the elements in the range [first, last) satisfies some condition. Let's say you want to figure out if an array contains at least one 9. You could just write the naive loop and waste time in contest.
+    /*
+    * std::any_of
+    * This is a very useful function that returns true if any of the elements in the range [first, last) satisfies some condition. 
+    * Let's say you want to figure out if an array contains at least one 9. You could just write the naive loop and waste time in contest.
+    */
 
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -20,7 +23,7 @@ void solve() {
             }
         }
 
-        //but you could be smart and write this all in one line.
+        // but you could be smart and write this all in one line.
         ok = any_of(a.begin(), a.end(), [](int x) { return x == 9; });
         cout << (ok ? "YES" : "NO") << '\n';
     }
@@ -29,9 +32,11 @@ void solve() {
 
 
 
-    //std::all_of
-    //This is a very useful function that returns true if all of the elements in the range [first, last) satisfy some condition. Let's say you want to figure out if an array contains only even numbers.
-
+    /*
+     * std::all_of
+     * This is a very useful function that returns true if all of the elements in the range [first, last) satisfy some condition. 
+     * Let's say you want to figure out if an array contains only even numbers.
+    */
     {
         vector<int> a = {2, 4, 6, 8, 10};
         bool ok = 1;
@@ -50,9 +55,11 @@ void solve() {
 
 
 
-    //std::none_of
-    //This is a very useful function that returns true if none of the elements in the range [first, last) satisfy some condition. Let's say you want to figure out if an array contains no 9s.
-
+    /*
+     * std::none_of
+     * This is a very useful function that returns true if none of the elements in the range [first, last) satisfy some condition. 
+     * Let's say you want to figure out if an array contains no 9s.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 10};
         bool ok = 1;
@@ -70,9 +77,12 @@ void solve() {
 
 
 
-    //std:count
-    //This is a very useful function that counts the number of elements in the range [first, last) that are equal to some value. Let's say you want to figure out how many 9s are in an array.
 
+    /*
+     * std::count
+     * This is a very useful function that counts the number of elements in the range [first, last) that are equal to some value. 
+     * Let's say you want to figure out how many 9s are in an array.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 9};
         int cnt = 0;
@@ -89,9 +99,12 @@ void solve() {
 
 
 
-    //std::count_if
-    //This is a very useful function that counts the number of elements in the range [first, last) that satisfy some condition. Let's say you want to figure out how many even numbers are in an array.
 
+    /*
+     * std::count_if
+     * This is a very useful function that counts the number of elements in the range [first, last) that satisfy some condition.
+     * Let's say you want to figure out how many even numbers are in an array.
+     */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
         int cnt = 0;
@@ -110,12 +123,15 @@ void solve() {
         cout << cnt << '\n';
     }
     
-    
-    
-    
-    //std::find
-    //This is a very useful function that returns an iterator to the first element in the range [first, last) that is equal to some value. Let's say you want to figure out if an array contains a 9 and if it does, where the first 9 is.
 
+    
+    
+    
+    /*
+     * std::find
+     * This is a very useful function that returns an iterator to the first element in the range [first, last) that is equal to some value.
+     * Let's say you want to figure out if an array contains a 9 and if it does, where the first 9 is.
+     */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int pos = -1;
@@ -133,13 +149,16 @@ void solve() {
 
 
 
-    //std::binary_search
-    //This is a very useful function that returns true if the value exists in the sorted range [first, last). Let's say you want to figure out if an array contains a 9 and the array is sorted.
 
+    /*
+     * std::binary_search
+     * This is a very useful function that returns true if the value exists in the sorted range [first, last). 
+     * Let's say you want to figure out if an array contains a 9 and the array is sorted.
+     */
     {
-        vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        vector<int> a = {1, 2, 3, 4, 5, 5, 5, 6, 7, 8, 9};
         bool ok = 0;
-        //Manual binary search
+        // Manual binary search
         int l = 0, r = (int)(a).size() - 1;
         while(l <= r) {
             int mid = (l + r) / 2;
@@ -155,14 +174,28 @@ void solve() {
 
         ok = binary_search(a.begin(), a.end(), 9);
         cout << (ok ? "YES" : "NO") << '\n';
+
+
+        /*
+        * Upper bound and lower bound are also very useful functions that can be used to 
+        * find the first element in a sorted array that is greater than or equal to a given value, 
+        * and the first element that is greater than a given value, respectively.
+        */
+        auto it = lower_bound(a.begin(), a.end(), 5) - a.begin();   // index: 4
+        cout << (it != (int)(a).size() ? "Lower bound index: " + to_string(it) : "Not found") << '\n';
+        
+        it = upper_bound(a.begin(), a.end(), 5) - a.begin();    // index: 7
+        cout << (it != (int)(a).size() ? "Upper bound index: " + to_string(it) : "Not found") << '\n';
     }
 
 
 
 
-    //std::max_element
-    //This is a very useful function that returns an iterator to the maximum element in the range [first, last). Let's say you want to figure out the maximum element in an array.
-
+    /*
+     * std::max_element
+     * This is a very useful function that returns an iterator to the maximum element in the range [first, last). 
+     * Let's say you want to figure out the maximum element in an array.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int mx = a[0];
@@ -177,9 +210,12 @@ void solve() {
 
 
 
-    //std::min_element
-    //This is a very useful function that returns an iterator to the minimum element in the range [first, last). Let's say you want to figure out the minimum element in an array.
 
+    /*
+     * std::min_element
+     * This is a very useful function that returns an iterator to the minimum element in the range [first, last).
+     * Let's say you want to figure out the minimum element in an array.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int mn = a[0];
@@ -194,9 +230,12 @@ void solve() {
 
 
 
-    //std::is_sorted
-    //This is a very useful function that returns true if the range [first, last) is sorted in non-decreasing order. Let's say you want to figure out if an array is sorted.
 
+    /*
+     * std::is_sorted
+     * This is a very useful function that returns true if the range [first, last) is sorted in non-decreasing order.
+     * Let's say you want to figure out if an array is sorted.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         bool ok = 1;
@@ -214,9 +253,12 @@ void solve() {
 
 
 
-    //std::accumulate
-    //This is a very useful function that returns the sum of the elements in the range [first, last) plus an initial value. Let's say you want to figure out the sum of the elements in an array.
 
+    /*
+     * std::accumulate
+     * This is a very useful function that returns the sum of the elements in the range [first, last) plus an initial value.
+     * Let's say you want to figure out the sum of the elements in an array.
+    */
     {
         vector<int> a = {1, 2, 3, 4, 5};
         int sum = 0;
