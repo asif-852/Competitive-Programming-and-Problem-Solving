@@ -6,6 +6,8 @@ using namespace std;
 Binary Indexed Tree (BIT) / Fenwick Tree
 Supports point updates and prefix sum queries in O(log n) time.
 Range updates and range queries in O(log n) time.
+
+Original source: https://github.com/ShahjalalShohag/code-library
 */
  
 struct BIT {
