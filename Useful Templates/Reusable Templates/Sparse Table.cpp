@@ -7,10 +7,6 @@ Sparse Table (idempotent functions)
 Supports static range queries in O(1) time after O(n log n) preprocessing.
 Works for any idempotent function (min, max, gcd, lcm, bitwise and, bitwise or, etc.).
 
-Usage example:
-auto func = [](int x, int y) { use operations like min / max / gcd / and / or etc. };
-SparseTable<int, decltype(func)> st(a, func);
-
 Original source: https://github.com/the-tourist/algo
 */
 
